@@ -3,13 +3,17 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-@Controller('users')
+@Controller('users')        // => /users
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @Post() //@Body() is actually req.body, these are to receive arguments from service
+  create(@Body("email") email: string,       //"email" in @Body() is the according argument, myEmail is a var that is assigned with the value of the argument "email"
+        //const myEmail = req.body.email      
+        @Body("password") password: string, 
+        @Body("name") name: string)
+         {        
+    return this.usersService.create(email, password, name);
   }
 
   @Get()
