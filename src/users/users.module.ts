@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 
 @Module({   
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],    //this is injecting mongdodb into users module
+  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],    //this is injecting mongdodb into users module (but this is just initializing step, gotta actually inject in the service)
   controllers: [UsersController],
   providers: [UsersService]
 })
