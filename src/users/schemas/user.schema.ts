@@ -5,10 +5,10 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
-  @Prop({required: true})   //validating
+  @Prop({ required: true }) //validating
   email: string;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   password: string;
 
   @Prop()
