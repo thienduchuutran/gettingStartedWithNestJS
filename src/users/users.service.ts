@@ -22,7 +22,7 @@ export class UsersService {
 
   async create(hoidanit: CreateUserDto) {
     const hashPassword = this.getHashPassword(hoidanit.password);
-    let user = await this.userModal.create({
+    const user = await this.userModal.create({
       email: hoidanit.email,
       password: hashPassword,
       name: hoidanit.name,
@@ -44,8 +44,11 @@ export class UsersService {
     });
   }
 
-  update(updateUserDto: UpdateUserDto) {
-    return `This action updates a user`;
+  async update(updateUserDto: UpdateUserDto) {
+    return await this.userModal.updateOne(
+      { _id: updateUserDto._id },   //this is the condition that user has to input id, then comparision be made in db to get the correct record
+      { ...updateUserDto },   //this is copying the remaining fields/attributes
+    );
   }
 
   remove(id: number) {
