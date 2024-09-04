@@ -10,4 +10,5 @@ import { LocalStrategy } from './passport/local.strategy';
   providers: [AuthService, LocalStrategy],
     //we need UsersService since it's in another folder, and this auth is another module
     //if we import a whole UsersModule, we can use whatever in UsersModule
+})
 export class AuthModule {}
