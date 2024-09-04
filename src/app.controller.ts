@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Controller()   //route /
 export class AppController {
@@ -17,5 +18,11 @@ export class AppController {
   @Post('/login')
   handleLogin(@Request() req){  //Passport library does everything for us, that's why now req.user returns all user login data
     return this.authService.login(req.user) //token created by login method in auth.service
+  }
+
+  @UseGuards(JwtAuthGuard)    //now we actually have jwt
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }
