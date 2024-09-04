@@ -8,14 +8,15 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private configService: ConfigService) {
-    super({
+    super({ //this is where JWT Guard decoding token
+      //this is getting token from req.headers 
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_SECRET'), //we are getting the access token key
+      secretOrKey: configService.get<string>('JWT_ACCESS_TOKEN'), //we are getting the access token key
     });
   }
 
-  //this function will decode the access token
+  //and if token is valid here then returning data for user
   async validate(payload: any) {
     return { userId: payload.sub, username: payload.username };
   }
