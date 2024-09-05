@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({ timestamps: true }) //whenever we add new or update the db automatically updates all timestamp fields
 export class User {
   @Prop({ required: true }) //validating
   email: string;
@@ -28,6 +28,13 @@ export class User {
 
   @Prop()
   updatedAt: Date;
+
+  //gotta add the 2 below so mongoose would work
+  @Prop()
+  isDeleted: boolean
+
+  @Prop()
+  deletedAt: Date
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
