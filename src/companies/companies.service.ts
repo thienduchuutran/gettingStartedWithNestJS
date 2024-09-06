@@ -1,11 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Company, CompanyDocument } from './schema/company.schema';
+import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class CompaniesService {
-  create(createCompanyDto: CreateCompanyDto) {
-    return 'This action adds a new company';
+  constructor(
+    @InjectModel(Company.name)  //gotta inject the company schema here to interact with company schema in db
+    private companyModal: SoftDeleteModel<CompanyDocument>
+  ){
+
+  }
+  async create(createCompanyDto: CreateCompanyDto) {
+    return await this.companyModal.create({
+      name: createCompanyDto.name,
+      address: createCompanyDto.address,
+      description: createCompanyDto.description
+      //or ...createCompanyDto
+    });
   }
 
   findAll() {

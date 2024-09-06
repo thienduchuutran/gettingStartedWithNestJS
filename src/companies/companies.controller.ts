@@ -8,7 +8,8 @@ export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
   @Post()
-  create(@Body() createCompanyDto: CreateCompanyDto) {
+  create(@Body() createCompanyDto: CreateCompanyDto) {  //this line also helps validate if user inputs all info
+    console.log('check companies: ', createCompanyDto)
     return this.companiesService.create(createCompanyDto);
   }
 
