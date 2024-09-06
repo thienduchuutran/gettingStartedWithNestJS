@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { IUser } from 'src/users/users.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   //username and password are the 2 params the passport library returns
@@ -21,12 +22,23 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { 
-      username: user.email, 
-      sub: user._id };
+  async login(user: IUser) {
+    //IUser so that we can get id, name, email and role of a user
+    const { _id, name, email, role } = user;
+    const payload = {
+      sub: 'token login',
+      iss: 'from server',
+      _id,
+      name,
+      email,
+      role,
+    };
     return {
-      access_token: this.jwtService.sign(payload),  //this is where JWT actually is created
+      access_token: this.jwtService.sign(payload), //this is where JWT actually is created
+      _id,
+      name,
+      email,
+      role,
     };
   }
 }
