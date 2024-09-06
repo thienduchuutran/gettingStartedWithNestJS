@@ -13,7 +13,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(username: string, password: string): Promise<any> {
     const user = await this.authService.validateUser(username, password);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Username / password k hop le'); //this message is shown on UI
     }
     return user; //this is gonna be returned to handleLogin(@Request() req) in app.controller, then handleLogin() is calling login() in authService
   }
