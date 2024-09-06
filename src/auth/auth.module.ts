@@ -8,6 +8,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './passport/jwt.strategy';
 import ms from 'ms';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -30,5 +31,6 @@ import ms from 'ms';
   //we need UsersService since it's in another folder, and this auth is another module
   //if we import a whole UsersModule, we can use whatever in UsersModule
   exports: [AuthService],
+  controllers: [AuthController] //here so that our module recognize this new-added AuthController
 })
 export class AuthModule {}

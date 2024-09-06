@@ -12,7 +12,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService); //since main.ts file ain't have constructor, we gotta add this to use .env file
 
   const reflector = app.get(Reflector);
-  app.useGlobalGuards( new JwtAuthGuard( reflector))
+  app.useGlobalGuards( new JwtAuthGuard( reflector))  
 
   app.useStaticAssets(join(__dirname, '..', 'public')); //useStaticAssets allows a page to access js, css, img in public folder when being rendered
   app.setBaseViewsDir(join(__dirname, '..', 'views')); //storing view engine in views folder
