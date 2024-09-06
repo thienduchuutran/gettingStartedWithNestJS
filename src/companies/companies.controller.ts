@@ -12,7 +12,7 @@ export class CompaniesController {
   @Post()                                            //customized decorator, helping get all req.user attributes of user thanks to  jwt.strategy decode token then return user
   create(@Body() createCompanyDto: CreateCompanyDto, @User() user: IUser) {  //this line also helps validate if user inputs all info
     console.log('check user info: ', user)
-    return this.companiesService.create(createCompanyDto);
+    return this.companiesService.create(createCompanyDto, user);  //passing info of the user who creates the company in
   }
 
   @Get()
