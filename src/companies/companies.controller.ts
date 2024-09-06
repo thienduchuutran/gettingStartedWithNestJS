@@ -2,14 +2,16 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { IUser } from 'src/users/users.interface';
+import { User } from 'src/decorator/customize';
 
 @Controller('companies')
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
-  @Post()
-  create(@Body() createCompanyDto: CreateCompanyDto) {  //this line also helps validate if user inputs all info
-    console.log('check companies: ', createCompanyDto)
+  @Post()                                            //customized decorator, helping get all req.user attributes of user thanks to  jwt.strategy decode token then return user
+  create(@Body() createCompanyDto: CreateCompanyDto, @User() user: IUser) {  //this line also helps validate if user inputs all info
+    console.log('check user info: ', user)
     return this.companiesService.create(createCompanyDto);
   }
 
