@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -12,16 +12,47 @@ export class User {
   password: string;
 
   @Prop()
-  name: string;
-
-  @Prop()
-  phone: string;
-
-  @Prop()
   age: number;
 
   @Prop()
+  gender: string;
+
+  @Prop()
   address: string;
+
+  @Prop()
+  name: string;
+
+  @Prop({type: Object})
+  company: {
+    _id: mongoose.Schema.Types.ObjectId;
+    name: string;
+  };
+
+  @Prop()
+  role: string;
+
+  //for login feature on frontend side 
+  @Prop()
+  refreshToken: string;
+
+  @Prop({ type: Object })
+  createdBy: {
+    _id: mongoose.Schema.Types.ObjectId;
+    email: string;
+  };
+
+  @Prop({ type: Object })
+  updatedBy: {
+    _id: mongoose.Schema.Types.ObjectId;
+    email: string;
+  };
+
+  @Prop({ type: Object })
+  deletedBy: {
+    _id: mongoose.Schema.Types.ObjectId;
+    email: string;
+  };
 
   @Prop()
   createdAt: Date;
@@ -29,12 +60,12 @@ export class User {
   @Prop()
   updatedAt: Date;
 
-  //gotta add the 2 below so mongoose would work
+  //these 2 below are for soft delete
   @Prop()
-  isDeleted: boolean
+  isDeleted: boolean;
 
   @Prop()
-  deletedAt: Date
+  deletedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
