@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/users/users.interface';
+import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -40,5 +41,14 @@ export class AuthService {
       email,
       role,
     };
+  }
+
+  async register(user: RegisterUserDto){
+    let newUser = await this.usersService.register(user)  //we pass responsibility to userService since it can interact with db and has hash password
+
+    return {
+      _id: newUser?._id,
+      createdAt: newUser?.createdAt
+    }
   }
 }
