@@ -28,6 +28,7 @@ export class CompaniesService {
     });
   }
 
+  //page magination with nestJS
   async findAll(currentPage: number, limit: number, qs: string) {
     const { filter, sort, projection, population } = aqp(qs);
     delete filter.page

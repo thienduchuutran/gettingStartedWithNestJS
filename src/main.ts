@@ -5,6 +5,7 @@ import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { TransformInterceptor } from './core/transform.interceptor';
 require('dotenv').config();
 
 async function bootstrap() {
@@ -20,6 +21,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
+  //first step in making the API returned by nestJS uniformed: making the functionality globally
+  app.useGlobalInterceptors(new TransformInterceptor());
+  
   //config CORS
   app.enableCors({
     origin: '*',
