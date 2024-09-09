@@ -14,6 +14,8 @@ async function bootstrap() {
 
   const reflector = app.get(Reflector);
   app.useGlobalGuards( new JwtAuthGuard( reflector))  
+  app.useGlobalInterceptors(new TransformInterceptor(reflector)); //passing reflector in so we can get metadata
+
 
   app.useStaticAssets(join(__dirname, '..', 'public')); //useStaticAssets allows a page to access js, css, img in public folder when being rendered
   app.setBaseViewsDir(join(__dirname, '..', 'views')); //storing view engine in views folder
@@ -22,7 +24,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   //first step in making the API returned by nestJS uniformed: making the functionality globally
-  app.useGlobalInterceptors(new TransformInterceptor());
   
   //config CORS
   app.enableCors({
