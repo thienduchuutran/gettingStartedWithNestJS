@@ -30,7 +30,6 @@ export class AuthController {
   @ResponseMessage('Register a new user')
   @Post('/register')
   handleRegister(@Body() registerUserDto: RegisterUserDto){
-    console.log('check register: ', registerUserDto)
     return this.authService.register(registerUserDto)
   }
 }

@@ -7,7 +7,9 @@ class Company {
   @IsNotEmpty()
   _id: mongoose.Schema.Types.ObjectId;
 
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'company k de trong'
+  })
   name: string;
 }
 export class CreateUserDto {
@@ -49,7 +51,7 @@ export class CreateUserDto {
   address: string;
 
   @IsNotEmpty({
-    message: 'address khong duoc trong',
+    message: 'role khong duoc trong',
   })
   role: string;
 
