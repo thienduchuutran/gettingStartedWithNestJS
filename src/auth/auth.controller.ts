@@ -21,6 +21,7 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard) //now we actually have jwt
   @Post('/login')
+  @ResponseMessage('User Login')
   handleLogin(@Request() req) {
     //Passport library does everything for us, that's why now req.user returns all user login data
     return this.authService.login(req.user); //token created by login method in auth.service

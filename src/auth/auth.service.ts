@@ -3,12 +3,15 @@ import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/users/users.interface';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { ConfigService } from '@nestjs/config';
+import ms from 'ms';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService  //need configService to access .env file
   ) {}
 
   //username and password are the 2 params the passport library returns
@@ -34,12 +37,18 @@ export class AuthService {
       email,
       role,
     };
+
+    const refresh_token = this.createRefreshToken(payload)
     return {
       access_token: this.jwtService.sign(payload), //this is where JWT actually is created
-      _id,
-      name,
-      email,
-      role,
+      refresh_token,
+      user: {
+        _id,
+        name,
+        email,
+        role,
+      }
+
     };
   }
 
@@ -50,5 +59,14 @@ export class AuthService {
       _id: newUser?._id,
       createdAt: newUser?.createdAt
     }
+  }
+
+  //create a refresh token whenever logging in
+  createRefreshToken = (payload: any) => {
+    const refresh_token = this.jwtService.sign(payload, { //we gonna use 2 different tokens: access token and refresh token
+      secret: this.configService.get<string>("JWT_REFRESH_TOKEN_SECRET"),
+      expiresIn: ms(this.configService.get<string>("JWT_REFRESH_EXPIRE")) / 1000
+    })
+    return refresh_token
   }
 }
