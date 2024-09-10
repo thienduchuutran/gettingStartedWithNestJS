@@ -7,12 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { TestGuard } from './test.guard';
-import { ResponseMessage, User } from 'src/decorator/customize';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from './users.interface';
 
 @Controller('users') // => /users
@@ -35,15 +36,23 @@ export class UsersController {
     }
   }
 
-  @UseGuards(TestGuard)   //putting TestGuard in to @UseGuard, then in class TestGuard is where we actually perform logic to validate data
+  // @UseGuards(TestGuard)   //putting TestGuard in to @UseGuard, then in class TestGuard is where we actually perform logic to validate data
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @ResponseMessage('Fetch user with pagination')
+  findAll(
+    @Query("page") currentPage: string,
+    @Query("limit") limit: string,
+    @Query() qs: string,
+  ) {
+    return this.usersService.findAll(+currentPage, +limit, qs);
   }
 
-  @Get(':hoidanit')
-  findOne(@Param('hoidanit') id: string) {
-    return this.usersService.findOne(id);
+  @Public()
+  @Get(':id')
+  @ResponseMessage('Fetch user by id')
+  async findOne(@Param('id') id: string) {
+    const foundUser = await this.usersService.findOne(id)
+    return foundUser;
   }
 
   @ResponseMessage('Update a user')
