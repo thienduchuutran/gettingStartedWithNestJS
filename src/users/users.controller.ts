@@ -46,14 +46,16 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @ResponseMessage('Update a user')
   @Patch()
-  update(@Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(updateUserDto);
+  async update(@Body() updateUserDto: UpdateUserDto, @User() user: IUser) {
+    let updatedUser = this.usersService.update(updateUserDto, user)
+    return updatedUser;
   }
 
+  @ResponseMessage('Delete a user')
   @Delete(':id')
-  remove(@Param('id') id: string) {     //the decorator @Param('id') is to get whatever passed in @Delete()
-    console.log('check id: ', id)
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: string, @User() user: IUser) {     //the decorator @Param('id') is to get whatever passed in @Delete()
+    return await this.usersService.remove(id, user);
   }
 }
