@@ -39,6 +39,10 @@ export class AuthService {
     };
 
     const refresh_token = this.createRefreshToken(payload)
+
+    //update user in db with the new refresh token
+    await this.usersService.updateUserToken(refresh_token, _id)
+
     return {
       access_token: this.jwtService.sign(payload), //this is where JWT actually is created
       refresh_token,

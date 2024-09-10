@@ -150,4 +150,14 @@ export class UsersService {
     })
     return newRegister
   }
+
+  //update user in db with the new refresh token
+  updateUserToken = async (refreshToken: string, _id: string) => {
+    return await this.userModel.updateOne({
+      _id
+    },
+    {
+      refreshToken
+    });
+  }
 }
