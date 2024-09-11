@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { IUser } from 'src/users/users.interface';
@@ -79,5 +79,16 @@ export class AuthService {
       expiresIn: ms(this.configService.get<string>("JWT_REFRESH_EXPIRE")) / 1000
     })
     return refresh_token
+  }
+
+  //Verifying if a token after getting from client is valid or not (expired not not)
+  processNewToken = (refreshToken: string) => {
+    try{
+      this.jwtService.verify(refreshToken, {
+        secret: this.configService.get<string>("JWT_REFRESH_TOKEN_SECRET"), //this secret is for nestJS to decode to see if token is valid
+      })
+    }catch(error) {
+      throw new BadRequestException(`Refresh token k hop le, vui long log in`)
+    }
   }
 }

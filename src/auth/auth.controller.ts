@@ -48,6 +48,6 @@ export class AuthController {
   @Get('/refresh')
   handleRefreshToken(@Req() request: Request){  //this is how we server get cookies from client
     const refreshToken = request.cookies["refresh_token"]  //we set the name "refresh_token" for response.cookies in auth.services
-    return {refreshToken}
+    return this.authService.processNewToken(refreshToken)
   }
 }
