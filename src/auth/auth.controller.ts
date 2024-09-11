@@ -9,11 +9,12 @@ import {
   Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Public, ResponseMessage } from 'src/decorator/customize';
+import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { Request, Response } from 'express';
+import { IUser } from 'src/users/users.interface';
 
 @Controller('auth') //so that all endpoints for login starts with '/auth'
 export class AuthController {
@@ -34,5 +35,11 @@ export class AuthController {
   @Post('/register')
   handleRegister(@Body() registerUserDto: RegisterUserDto){
     return this.authService.register(registerUserDto)
+  }
+
+  @ResponseMessage('Get user info')
+  @Get('/account')
+  handleGetAccount(@User() user: IUser){  //req.user since that's what we customize User decorator
+    return {user}
   }
 }
