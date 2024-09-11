@@ -13,8 +13,9 @@ import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RegisterUserDto } from 'src/users/dto/create-user.dto';
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import { IUser } from 'src/users/users.interface';
+import { read } from 'fs';
 
 @Controller('auth') //so that all endpoints for login starts with '/auth'
 export class AuthController {
@@ -46,8 +47,17 @@ export class AuthController {
   @Public()
   @ResponseMessage('Get user by refresh token')
   @Get('/refresh')
-  handleRefreshToken(@Req() request: Request){  //this is how we server get cookies from client
+  handleRefreshToken(@Req() request: Request, @Res({ passthrough: true }) response: Response){  //this is how we server get cookies from client
     const refreshToken = request.cookies["refresh_token"]  //we set the name "refresh_token" for response.cookies in auth.services
-    return this.authService.processNewToken(refreshToken)
+    return this.authService.processNewToken(refreshToken, response)
+  }
+
+  @ResponseMessage('Logout user')
+  @Post('/logout')
+  handleLogout(
+    @Res({passthrough: true}) response: Response, //need response to get cookie
+    @User() user: IUser //get the info of the user who's logging out
+  ){  
+      return this.authService.logout(response, user)
   }
 }
