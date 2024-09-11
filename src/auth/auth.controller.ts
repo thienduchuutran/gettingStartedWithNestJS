@@ -42,4 +42,12 @@ export class AuthController {
   handleGetAccount(@User() user: IUser){  //req.user since that's what we customize User decorator
     return {user}
   }
+
+  @Public()
+  @ResponseMessage('Get user by refresh token')
+  @Get('/refresh')
+  handleRefreshToken(@Req() request: Request){  //this is how we server get cookies from client
+    const refreshToken = request.cookies["refresh_token"]  //we set the name "refresh_token" for response.cookies in auth.services
+    return {refreshToken}
+  }
 }
