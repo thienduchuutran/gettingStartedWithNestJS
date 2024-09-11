@@ -28,8 +28,8 @@ export class CompaniesController {
   @Get()
   @ResponseMessage('Fetch List Company with paginate')
   findAll(
-    @Query('page') currentPage: string, //const currentPage = req.query.page
-    @Query('limit') limit: string,
+    @Query('current') currentPage: string, //const currentPage = req.query.page
+    @Query('pageSize') limit: string,
     @Query() qs: string, //if we don't pass anything in @Query(), it gets all query strings, all params, everything
   ) {
     return this.companiesService.findAll(+currentPage, +limit, qs);
