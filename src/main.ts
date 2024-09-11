@@ -28,9 +28,10 @@ async function bootstrap() {
   
   //config CORS
   app.enableCors({
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
+    'origin': true, //if set * means allowing anywhere to connect, true means only same domain can connect
+    'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    'preflightContinue': false,
+    credentials: true  //allow client and server passing data
   });
 
   //config cookies
