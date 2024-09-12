@@ -46,13 +46,13 @@ export class MulterConfigService implements MulterOptionsFactory {
                     cb(null, join(this.getRootPath(), `public/images/${folder}`))
                 },
                 filename: (req, file, cb) => {  //helps us change our files names
-                    //get image extension
-                    let extName = path.extname(file.originalname);
+                    //get file extension
+                    let extName = path.extname(file.originalname);  
 
-                    //get image's name (without extension)
+                    //get file's name (without extension)
                     let baseName = path.basename(file.originalname, extName);
 
-                    let finalName = `${baseName}-${Date.now()}${extName}`
+                    let finalName = `${baseName}-${Date.now()}${extName}`   //joining to create a random string
                     cb(null, finalName)
                 }
             })

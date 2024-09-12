@@ -3,7 +3,7 @@ import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Public } from 'src/decorator/customize';
+import { Public, ResponseMessage } from 'src/decorator/customize';
 
 @Controller('files')
 export class FilesController {
@@ -11,11 +11,12 @@ export class FilesController {
 
   @Public()
   @Post('upload')
+  @ResponseMessage('Upload single file')
   @UseInterceptors(FileInterceptor('hoidanit')) //this middleware interceptor makes decorator @UploadFile work
   uploadFile(@UploadedFile( //these are copied from nestJS doc
     new ParseFilePipeBuilder()
     .addFileTypeValidator({
-      fileType: /\.(image\/jpeg|image\/png|txt\/plain|text\/csv|application\/msword|text\/html|application\/json)$/,
+      fileType: /^(image\/jpeg|image\/png|txt\/plain|text\/csv|application\/msword|text\/html|application\/json)$/,
     })
     .addMaxSizeValidator({
       maxSize: 1024 * 1024
@@ -24,7 +25,9 @@ export class FilesController {
       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
     }),
   ) file: Express.Multer.File) { //this is a middleware called multer to get file data out of a req and give to backend
-    console.log(file);
+    return{
+      fileName: file.filename
+    };
   }
 
   @Get()
