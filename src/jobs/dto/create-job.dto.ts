@@ -11,6 +11,11 @@ class Company {
     message: 'company k de trong'
   })
   name: string;
+
+  @IsNotEmpty({
+    message: 'Logi k duoc de trong'
+  })
+  logo: string
 }
 export class CreateJobDto {
 

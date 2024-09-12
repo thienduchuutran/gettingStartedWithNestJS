@@ -12,11 +12,11 @@ export class FilesController {
   @Public()
   @Post('upload')
   @ResponseMessage('Upload single file')
-  @UseInterceptors(FileInterceptor('hoidanit')) //this middleware interceptor makes decorator @UploadFile work
+  @UseInterceptors(FileInterceptor('fileUpload')) //this middleware interceptor makes decorator @UploadFile work
   uploadFile(@UploadedFile( //these are copied from nestJS doc
     new ParseFilePipeBuilder()
     .addFileTypeValidator({
-      fileType: /^(image\/jpeg|image\/png|txt\/plain|text\/csv|application\/msword|text\/html|application\/json)$/,
+      fileType: /^(image\/jpeg|image\/webp|image\/png|txt\/plain|text\/csv|pdf|application\/msword|text\/html|application\/json)$/,
     })
     .addMaxSizeValidator({
       maxSize: 1024 * 1024
