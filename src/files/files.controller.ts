@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipeBuilder, HttpStatus } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -12,7 +12,18 @@ export class FilesController {
   @Public()
   @Post('upload')
   @UseInterceptors(FileInterceptor('hoidanit')) //this middleware interceptor makes decorator @UploadFile work
-  uploadFile(@UploadedFile() file: Express.Multer.File) { //this is a middleware called multer to get file data out of a req and give to backend
+  uploadFile(@UploadedFile( //these are copied from nestJS doc
+    new ParseFilePipeBuilder()
+    .addFileTypeValidator({
+      fileType: /\.(image\/jpeg|image\/png|txt\/plain|text\/csv|application\/msword|text\/html|application\/json)$/,
+    })
+    .addMaxSizeValidator({
+      maxSize: 1024 * 1024
+    })
+    .build({
+      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+    }),
+  ) file: Express.Multer.File) { //this is a middleware called multer to get file data out of a req and give to backend
     console.log(file);
   }
 
