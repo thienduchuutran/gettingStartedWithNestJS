@@ -16,4 +16,9 @@ export class CreateCompanyDto {
     message: 'Description khong duoc trong',
   })
   description: string;
+
+  @IsNotEmpty({
+    message: 'Logo khong duoc trong',
+  })
+  logo: string;
 }
