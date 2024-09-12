@@ -43,8 +43,18 @@ export class JobsService {
     return `This action returns a #${id} job`;
   }
 
-  update(id: string, updateJobDto: UpdateJobDto) {
-    return `This action updates a #${id} job`;
+  async update(id: string, updateJobDto: UpdateJobDto, user: IUser) {
+    let updatedJob = await this.jobModel.updateOne({
+      _id: id
+    },
+    {
+      ...updateJobDto,
+      updatedBy: {
+        _id: user._id,
+        email: user.email,
+      },
+    }) 
+    return updatedJob;
   }
 
   remove(id: number) {

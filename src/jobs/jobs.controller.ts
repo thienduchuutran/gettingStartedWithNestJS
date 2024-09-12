@@ -4,6 +4,7 @@ import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Controller('jobs')
 export class JobsController {
@@ -25,9 +26,10 @@ export class JobsController {
     return this.jobsService.findOne(+id);
   }
 
+  @ResponseMessage('update a user')
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
-    return this.jobsService.update(id, updateJobDto);
+  update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto, @User() user: IUser) {
+    return this.jobsService.update(id, updateJobDto, user);
   }
 
   @Delete(':id')
