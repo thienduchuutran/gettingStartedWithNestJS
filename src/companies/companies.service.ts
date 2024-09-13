@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { IUser } from 'src/users/users.interface';
 import { use } from 'passport';
 import aqp from 'api-query-params';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class CompaniesService {
@@ -59,8 +60,14 @@ export class CompaniesService {
      
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+  async findOne(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return `not found user`;
+    }
+
+    return await this.companyModal.findById({
+      _id: id
+    });
   }
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto, user: IUser) {
