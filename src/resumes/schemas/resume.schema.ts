@@ -25,7 +25,7 @@ export class Resume {
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: Job.name})  //to join table
   jobId: mongoose.Schema.Types.ObjectId;
 
-  @Prop({type: mongoose.Schema.Types.ObjectId})
+  @Prop({type: mongoose.Schema.Types.Array})
   history: {
     status: string;
     updatedAt: Date;

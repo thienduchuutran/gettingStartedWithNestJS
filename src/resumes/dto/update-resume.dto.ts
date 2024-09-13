@@ -32,7 +32,5 @@ export class UpdateResumeDto extends PartialType(CreateResumeDto) {
     @ValidateNested()
     @Type(()=>History)
     history: History[]
-
-
 }
 
