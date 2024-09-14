@@ -101,6 +101,11 @@ export class RolesService {
   }
 
   async remove(id: string, user: IUser) {
+    const foundRole = await this.RoleModel.findById(id)
+    if (foundRole.name === "ADMIN"){
+      throw new BadRequestException("Can't delete ADMIN role")
+    }
+
     await this.RoleModel.updateOne({
       _id: id
     },
