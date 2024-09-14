@@ -114,9 +114,15 @@ export class UsersService {
   }
 
   async remove(id: string, user: IUser) {
+    //the admin is abc3@gmail.com
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return `not found user`;
     }
+    const foundUser = await this.userModel.findById(id)
+    if(foundUser.email === "abc3@gmail.com"){
+      throw new BadRequestException("Can't delete admin account")
+    }
+
     await this.userModel.updateOne({
       _id: id,
     },
