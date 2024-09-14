@@ -86,7 +86,8 @@ export class UsersService {
     }
     return this.userModel.findOne({
       _id: id,
-    }).select("-password"); //pick all the attributes we wanna get, but -password means exclude password
+    }).select("-password") //pick all the attributes we wanna get, but -password means exclude password
+    .populate({path: "role", select: { name: 1, _id: 1 }});
   }
 
   findOneByUsername(username: string) {
