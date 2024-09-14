@@ -9,11 +9,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './passport/jwt.strategy';
 import ms from 'ms';
 import { AuthController } from './auth.controller';
+import { RolesController } from 'src/roles/roles.controller';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
+    RolesController,  //in order to user rolesService in auth.controller, gotta import RolesController in auth.module
     JwtModule.registerAsync({
       //let nestjs know that we are using JWT passprt library
       imports: [ConfigModule],

@@ -16,10 +16,14 @@ import { RegisterUserDto } from 'src/users/dto/create-user.dto';
 import { Request, response, Response } from 'express';
 import { IUser } from 'src/users/users.interface';
 import { read } from 'fs';
+import { RolesService } from 'src/roles/roles.service';
 
 @Controller('auth') //so that all endpoints for login starts with '/auth'
 export class AuthController {
-  constructor(private authService: AuthService) {} //consumer
+  constructor(
+    private authService: AuthService,
+    private rolesService: RolesService //dependency injection
+  ) {} //consumer
 
   //added Public decorator so that it doesn't check JWT before loging in
   @Public()
@@ -40,7 +44,9 @@ export class AuthController {
 
   @ResponseMessage('Get user info')
   @Get('/account')
-  handleGetAccount(@User() user: IUser){  //req.user since that's what we customize User decorator
+  async handleGetAccount(@User() user: IUser){  //req.user since that's what we customize User decorator
+    const temp = await this.rolesService.findOne(user.role._id) as any  //querying db to get permissions of a user 
+    user.permissions = temp.permissions //this is where we actually assigning permissions for a user
     return {user}
   }
 
