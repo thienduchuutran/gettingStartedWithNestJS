@@ -10,12 +10,17 @@ import { IUser } from './users.interface';
 import { User } from 'src/decorator/customize';
 import { use } from 'passport';
 import aqp from 'api-query-params';
+import { Role } from 'src/roles/schemas/role.schema';
+import { USER_ROLE } from 'src/databases/sample';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(UserM.name) // we are injecting module User of Mongoose (MongoDB) into var userModel the line below
     private userModel: SoftDeleteModel<UserDocument>, //initialize like this so we can use softDelete()
+  
+    @InjectModel(Role.name) //we wanna be able to assign role for user when they sign up
+    private roleModel: SoftDeleteModel<UserDocument>
   ) {} //Model<User> here is the generic data type of this userModel var
 
   getHashPassword = (password: string) => {
@@ -35,6 +40,8 @@ export class UsersService {
         if(isExist){
           throw new BadRequestException(`The email ${email} da ton tai dung mail khac`)
         }
+
+
 
     const hashPassword = this.getHashPassword(password);
     const newUser = await this.userModel.create({
@@ -95,7 +102,7 @@ export class UsersService {
     return this.userModel.findOne({
       email: username,
     })
-    .populate({path: "role", select: {name: 1, permissions: 1}}); //so that when logging in we have permissions data of user
+    .populate({path: "role", select: {name: 1}}); //so that when fetching user data we can see the name of user's role
   }
 
   isValidPassword(password: string, hash: string){
@@ -151,10 +158,13 @@ export class UsersService {
       throw new BadRequestException(`The email ${email} da ton tai dung mail khac`)
     }
 
+    //fetch user role
+    const userRole = await this.roleModel.findOne({ name: USER_ROLE})
+
     let newRegister = await this.userModel.create({
       name, email, 
       password: hashPassword,
-      age, gender, address, role: 'USER'
+      age, gender, address, role: userRole?._id //automatically assign user role when a user signs up
     })
     return newRegister
   }
@@ -166,5 +176,9 @@ export class UsersService {
 
   findUserByToken = async (refreshToken: string) => {
       return await this.userModel.findOne({refreshToken})
+      .populate({
+        path: "role",
+        select: {name: 1} //so that every time ưe refresh token we also see the role of user
+      })
   }
 }
