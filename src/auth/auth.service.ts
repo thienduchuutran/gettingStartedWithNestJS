@@ -7,13 +7,15 @@ import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
 import { Response } from 'express';
 import { use } from 'passport';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private configService: ConfigService  //need configService to access .env file
+    private configService: ConfigService,  //need configService to access .env file
+    private rolesService: RolesService, //since we already imported rolesModule in auth.module, we can use this rolesService here
   ) {}
 
   //username and password are the 2 params the passport library returns
@@ -22,7 +24,14 @@ export class AuthService {
     if (user) {
       const isValid = this.usersService.isValidPassword(pass, user.password); //pass is whatever coming, user.password is whatever already stored in db
       if (isValid === true) {
-        return user;
+        const userRole = user.role as unknown as {_id: string; name: string}
+        const temp = await this.rolesService.findOne(userRole._id)
+
+        const objUser = {
+          ...user.toObject(), //user is in model type, so this converting user to JS object
+          permissions: temp?.permissions ?? []
+        }
+        return objUser;
       }
     }
     return null;
@@ -107,6 +116,10 @@ export class AuthService {
     //update user in db with the new refresh token
     await this.usersService.updateUserToken(refresh_token, _id.toString()) //the db in query process will convert it back to objectID
 
+    //fetch user's role
+    const userRole = user.role as unknown as {_id: string; name: string}
+    const temp = await this.rolesService.findOne(userRole._id)  //getting permissions data
+
     //clearing cookie before issuing a new one
     response.clearCookie("refresh_token")
     response.clearCookie("refresh_token1")
@@ -126,6 +139,7 @@ export class AuthService {
         name,
         email,
         role,
+        permissions: temp?.permissions?? []
       }
 
     };
