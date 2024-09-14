@@ -54,7 +54,7 @@ export class CreateUserDto {
     message: 'role khong duoc trong',
   })
   @IsMongoId({message: "Role has Mongo Id format"})
-  role: string;
+  role: mongoose.Schema.Types.ObjectId;
 
   @IsNotEmptyObject()
   @IsObject()

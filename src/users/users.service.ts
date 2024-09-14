@@ -94,7 +94,8 @@ export class UsersService {
 
     return this.userModel.findOne({
       email: username,
-    });
+    })
+    .populate({path: "role", select: {name: 1, permissions: 1}}); //so that when logging in we have permissions data of user
   }
 
   isValidPassword(password: string, hash: string){
