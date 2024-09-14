@@ -9,7 +9,7 @@ import { UsersService } from 'src/users/users.service';
 
 @Module({
   controllers: [DatabasesController],
-  providers: [DatabasesService, UsersService, UsersService],
+  providers: [DatabasesService, UsersService],
   imports: [
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
