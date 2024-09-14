@@ -15,6 +15,7 @@ export class ResumesController {
     return this.resumesService.create(createUserCvDto, user);
   }
 
+  //this is for user to review their past CVs
   @Post('by-user')
   @ResponseMessage('Get resume by user')
   getResumesByUser(@User() user: IUser) {

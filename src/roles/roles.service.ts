@@ -71,7 +71,7 @@ export class RolesService {
     }
 
     return await this.RoleModel.findById(id)  //number 1's mean we wanna select these fields 
-    .populate({ path: "permissions", select: {_id: 1, apiPath: 1, name: 1, method: 1}});  //this is to fetch all the permissions of the role
+    .populate({ path: "permissions", select: {_id: 1, apiPath: 1, name: 1, method: 1, module: 1}});  //this is to fetch all the permissions of the role
   }
 
   async update(_id: string, updateRoleDto: UpdateRoleDto, user: IUser) {
@@ -81,10 +81,10 @@ export class RolesService {
 
     const {name, description, isActive, permissions} = updateRoleDto
 
-    const isExist = await this.RoleModel.findOne({name})
-    if(isExist){
-      throw new BadRequestException(`Role with name=${name} existed`)
-    }
+    // const isExist = await this.RoleModel.findOne({name})
+    // if(isExist){
+    //   throw new BadRequestException(`Role with name=${name} existed`)
+    // }
 
     const updated = await this.RoleModel.updateOne({
       _id

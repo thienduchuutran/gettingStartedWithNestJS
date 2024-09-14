@@ -84,6 +84,17 @@ export class ResumesService {
     return await this.resumesModel.find({
       userId: user._id
     })
+    .sort("-createdAt") //to get the latest CVs
+    .populate([ //this populate function is to join fields between tables
+      {
+        path: "companyId",
+        select: {name: 1} //only pick "name" field
+      },
+      {
+        path: "jobId",
+        select: {name: 1} //name of job
+      }
+    ])
   }
 
   async update(_id: string, status: string, user: IUser) {
