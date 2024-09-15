@@ -40,7 +40,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     //check permissions
     const targetMethod = request.method
-    const targetEndpoint = request.route?.path
+    const targetEndpoint = request.route?.path as string
 
     const permissions = user?.permissions ?? []
     let isExist = permissions.find(permission => 
@@ -48,7 +48,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       &&
       targetEndpoint === permission.apiPath
     )
-      //doing this so it doesnn't check permission when logging in or anything related to auth
+      //doing this so it doesnn't check permission when logging in
       if(targetEndpoint.startsWith("/api/v1/auth")) isExist = true
       if(!isExist){
         throw new ForbiddenException("You don't have permission to access this endpoint")
