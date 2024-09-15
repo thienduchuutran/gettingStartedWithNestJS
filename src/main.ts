@@ -14,7 +14,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService); //since main.ts file ain't have constructor, we gotta add this to use .env file
 
   const reflector = app.get(Reflector);
-  app.useGlobalGuards( new JwtAuthGuard( reflector))  
+  app.useGlobalGuards( new JwtAuthGuard( reflector))  //this is to protect endpoints (backend user authorization)
+
   app.useGlobalInterceptors(new TransformInterceptor(reflector)); //passing reflector in so we can get metadata
 
 

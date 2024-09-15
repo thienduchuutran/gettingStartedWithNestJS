@@ -1,13 +1,16 @@
 //auth guard is a middleware checking is we are using jwt strategy or not
 
 import {
+  BadRequestException,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from 'src/decorator/customize';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -23,13 +26,31 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       return true;
     }
     return super.canActivate(context);
-  }
+  } 
+  
+  //if an endpoint is not public then it runs this block
+  handleRequest(err, user, info, context: ExecutionContext) {  //this handleRequest gets result from jwt.strategy of passport lib
+    const request: Request = context.switchToHttp().getRequest()
+    //the Request is from express 
 
-  handleRequest(err, user, info) {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
       throw err || new UnauthorizedException("Token k hop le hoac k co token o bearer token o header request");
     }
+
+    //check permissions
+    const targetMethod = request.method
+    const targetEndpoint = request.route?.path
+
+    const permissions = user?.permissions ?? []
+    const isExist = permissions.find(permission => 
+      targetMethod === permission.method
+      &&
+      targetEndpoint === permission.apiPath
+    )
+      if(!isExist){
+        throw new ForbiddenException("You don't have permission to access this endpoint")
+      }  
     return user;
   }
 } //thanks to this, nestjs knows we using jwt

@@ -39,7 +39,7 @@ export class AuthService {
 
   async login(user: IUser, response: Response) {
     //IUser so that we can get id, name, email and role of a user
-    const { _id, name, email, role } = user;
+    const { _id, name, email, role, permissions } = user;
     const payload = {
       sub: 'token login',
       iss: 'from server',
@@ -47,6 +47,7 @@ export class AuthService {
       name,
       email,
       role,
+      permissions
     };
 
     const refresh_token = this.createRefreshToken(payload)
@@ -68,6 +69,7 @@ export class AuthService {
         name,
         email,
         role,
+        permissions
       }
 
     };
