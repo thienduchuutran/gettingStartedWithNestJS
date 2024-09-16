@@ -14,6 +14,7 @@ export class MailController {
   constructor(private readonly mailService: MailService,
     private mailerService: MailerService,
 
+    //these tables are for sending job emails to subscribers based on skills later
     @InjectModel(Subscriber.name)
     private subscriberModel: SoftDeleteModel<SubscriberDocument>,
 

@@ -73,13 +73,10 @@ export class SubscribersService {
     return await this.SubcriberModel.findById(id)  
   };
 
-  async update(id: string, updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
-    if(!mongoose.Types.ObjectId.isValid(id)){
-      throw new BadRequestException("not found subscriber")
-    } 
+  async update( updateSubscriberDto: UpdateSubscriberDto, user: IUser) {
 
     let updated = await this.SubcriberModel.updateOne({
-      _id: id
+      email: user.email
     },
     {
       ...updateSubscriberDto,
@@ -87,6 +84,9 @@ export class SubscribersService {
         _id: user._id,
         email: user.email
       }
+    },
+    {
+      upsert: true  //if a user hasn't subscribed, meaning the user ain't have id yet, so we add new, otherwise update
     })
 
     return updated;
@@ -110,5 +110,10 @@ export class SubscribersService {
     return await this.SubcriberModel.softDelete({
       _id: id
     })
+  }
+
+  async getSkills(user: IUser){
+    const {email} = user
+    return await this.SubcriberModel.findOne({email}, {skills: 1})
   }
 }
