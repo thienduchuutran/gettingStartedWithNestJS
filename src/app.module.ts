@@ -16,9 +16,11 @@ import { RolesModule } from './roles/roles.module';
 import { DatabasesModule } from './databases/databases.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { MailModule } from './mail/mail.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     // MongooseModule.forRoot('mongodb+srv://hoidanit:duc2784ahihi@cluster0.aznqt.mongodb.net/'),
     MongooseModule.forRootAsync({
       //since app.module can't initialize configService, we gotta load async with this function to use .env file

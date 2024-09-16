@@ -23,7 +23,9 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views')); //storing view engine in views folder
   app.setViewEngine('ejs');
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true //so that we don't lose data when updating
+  }));
 
   //first step in making the API returned by nestJS uniformed: making the functionality globally
   
