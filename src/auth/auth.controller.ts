@@ -17,6 +17,7 @@ import { Request, response, Response } from 'express';
 import { IUser } from 'src/users/users.interface';
 import { read } from 'fs';
 import { RolesService } from 'src/roles/roles.service';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('auth') //so that all endpoints for login starts with '/auth'
 export class AuthController {
@@ -28,6 +29,8 @@ export class AuthController {
   //added Public decorator so that it doesn't check JWT before loging in
   @Public()
   @UseGuards(LocalAuthGuard) //now we actually have jwt
+  @UseGuards(ThrottlerGuard)  //importing ThrottlerModule in app.module is not enough, gotta put it here so that rate limit for API login works
+  // @Throttle(5, 60) this is overriding the Throttle
   @Post('/login')
   @ResponseMessage('User Login')
   handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {//Res to assign cookies to client
