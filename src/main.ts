@@ -7,6 +7,7 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { TransformInterceptor } from './core/transform.interceptor';
 import cookieParser from 'cookie-parser'
+import helmet from 'helmet';
 require('dotenv').config();
 
 async function bootstrap() {
@@ -47,6 +48,9 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: ['1', '2']
   });
+
+  //config helmet
+  app.use(helmet());
 
   await app.listen(configService.get<string>('PORT'));
 }
