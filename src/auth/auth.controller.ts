@@ -12,13 +12,13 @@ import { AuthService } from './auth.service';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { RegisterUserDto } from 'src/users/dto/create-user.dto';
+import { RegisterUserDto, UserLoginDto } from 'src/users/dto/create-user.dto';
 import { Request, response, Response } from 'express';
 import { IUser } from 'src/users/users.interface';
 import { read } from 'fs';
 import { RolesService } from 'src/roles/roles.service';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 @ApiTags("auth")
 @Controller('auth') //so that all endpoints for login starts with '/auth'
@@ -33,6 +33,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard) //now we actually have jwt
   @UseGuards(ThrottlerGuard)  //importing ThrottlerModule in app.module is not enough, gotta put it here so that rate limit for API login works
   // @Throttle(5, 60) this is overriding the Throttle
+  @ApiBody({ type: UserLoginDto, })
   @Post('/login')
   @ResponseMessage('User Login')
   handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {//Res to assign cookies to client

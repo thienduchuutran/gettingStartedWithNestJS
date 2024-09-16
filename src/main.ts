@@ -71,7 +71,12 @@ async function bootstrap() {
     // .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document,  {
+    swaggerOptions: {
+      persistAuthorization: true, //this is so that when we F5 swagger UI, the bearer token ain't gone
+    }
+  }
+);
 
   await app.listen(configService.get<string>('PORT'));
 }
