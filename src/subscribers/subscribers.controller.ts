@@ -5,7 +5,7 @@ import { UpdateSubscriberDto } from './dto/update-subscriber.dto';
 import { ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
 
-@Controller('auth/subscribers')
+@Controller('subscribers')
 export class SubscribersController {
   constructor(private readonly subscribersService: SubscribersService) {}
 
