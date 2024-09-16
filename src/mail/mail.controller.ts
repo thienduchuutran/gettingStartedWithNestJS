@@ -9,6 +9,9 @@ import { Subscriber, SubscriberDocument } from 'src/subscribers/schemas/subscrib
 import { Job, JobDocument } from 'src/jobs/schemas/job.schema';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags("mail")
 @Controller('mail')
 export class MailController {
   constructor(private readonly mailService: MailService,

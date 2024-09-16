@@ -18,7 +18,9 @@ import { IUser } from 'src/users/users.interface';
 import { read } from 'fs';
 import { RolesService } from 'src/roles/roles.service';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("auth")
 @Controller('auth') //so that all endpoints for login starts with '/auth'
 export class AuthController {
   constructor(
