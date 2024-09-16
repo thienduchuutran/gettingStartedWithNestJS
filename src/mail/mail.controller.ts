@@ -19,6 +19,9 @@ export class MailController {
       from: '"Support Team" <support@example.com>', // override default from
       subject: 'Welcome to Nice App! Confirm your Email',
       template: "new-job", // HTML body content
+      context: {
+        receiver: "Duc"
+      }
     });
   }
 
