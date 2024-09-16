@@ -26,7 +26,7 @@ async function bootstrap() {
   app.setViewEngine('ejs');
 
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true //so that we don't lose data when updating
+    whitelist: true //so that we don't lose data when updating, and if user passes extra data it won't update the extra
   }));
 
   //first step in making the API returned by nestJS uniformed: making the functionality globally

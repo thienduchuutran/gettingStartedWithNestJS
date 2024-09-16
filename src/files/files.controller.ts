@@ -15,18 +15,7 @@ export class FilesController {
   @Post('upload')
   @ResponseMessage('Upload single file')
   @UseInterceptors(FileInterceptor('fileUpload')) //this middleware interceptor makes decorator @UploadFile work
-  uploadFile(@UploadedFile( //these are copied from nestJS doc
-    new ParseFilePipeBuilder()
-    .addFileTypeValidator({
-      fileType: /^(image\/jpeg|image\/webp|image\/png|txt\/plain|text\/csv|pdf|application\/msword|text\/html|application\/json)$/,
-    })
-    .addMaxSizeValidator({
-      maxSize: 1024 * 1024
-    })
-    .build({
-      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
-    }),
-  ) file: Express.Multer.File) { //this is a middleware called multer to get file data out of a req and give to backend
+  uploadFile(@UploadedFile() file: Express.Multer.File) { //this is a middleware called multer to get file data out of a req and give to backend
     return{
       fileName: file.filename
     };
