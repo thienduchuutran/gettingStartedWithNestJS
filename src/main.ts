@@ -58,6 +58,16 @@ async function bootstrap() {
     .setTitle('NestJS Series APIs Document')
     .setDescription('All Modules APIs')
     .setVersion('1.0')
+    .addBearerAuth( 
+      {
+        type: 'http',
+        scheme: 'Bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+      },
+      'token',
+    )
+    .addSecurityRequirements('token')
     // .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
