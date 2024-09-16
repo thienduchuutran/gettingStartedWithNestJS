@@ -3,6 +3,8 @@ import { MailService } from './mail.service';
 import { MailController } from './mail.controller';
 import { ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -17,8 +19,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
           },
         },
 
-        // template: {
-        //   dir: join(__dirname, 'templates'),
+        // template: { //__dirname is link to our root foler, then join with 'templates'
+        //   dir: join(__dirname, 'templates'),  //this is telling the lib all our templates files are stored in templates folder
         //   adapter: new HandlebarsAdapter(),
         //   options: {
         //     strict: true,
