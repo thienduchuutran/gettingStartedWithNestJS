@@ -19,13 +19,15 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
           },
         },
 
-        // template: { //__dirname is link to our root foler, then join with 'templates'
-        //   dir: join(__dirname, 'templates'),  //this is telling the lib all our templates files are stored in templates folder
-        //   adapter: new HandlebarsAdapter(),
-        //   options: {
-        //     strict: true,
-        //   },
-        // },
+        template: { //__dirname is link to our root foler, then join with 'templates'
+          dir: join(__dirname, 'templates'),  //this is telling the lib all our templates files are stored in templates folder
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+
+        preview: true,
       }),
       inject: [ConfigService],
     }),
